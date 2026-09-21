@@ -101,5 +101,5 @@ docker compose down -v
 - [Valor de negocio](docs/valor-negocio.md)
 - [Reporte de validación](docs/reporte-validacion.md)
 - [Guía de demo](docs/guia-demo.md)
-- [Guion de defensa](docs/guion-defensa.md)
 - [Declaración de uso de IA](docs/declaracion-uso-ia.md)
+- [Video demostrativo](Video/video%20demo.mp4)
