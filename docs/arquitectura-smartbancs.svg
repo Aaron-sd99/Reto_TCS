@@ -1,0 +1,157 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="930" viewBox="0 0 1600 930">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M1,1 L9,5 L1,9 Z" fill="#1f2937"/>
+    </marker>
+    <style>
+      .page-title { font: 800 24px Arial, sans-serif; fill: #075ca8; letter-spacing: .2px; }
+      .cluster-title { font: 800 18px Arial, sans-serif; fill: #075ca8; }
+      .group-title { font: 800 16px Arial, sans-serif; fill: #075ca8; text-anchor: middle; }
+      .node-title { font: 700 14px Arial, sans-serif; fill: #075ca8; text-anchor: middle; }
+      .node-text { font: 400 12px Arial, sans-serif; fill: #1f2937; text-anchor: middle; }
+      .small { font: 400 11px Arial, sans-serif; fill: #1f2937; text-anchor: middle; }
+      .legend { font: 400 12px Arial, sans-serif; fill: #1f2937; }
+      .outer { fill: #ffffff; stroke: #075ca8; stroke-width: 3; }
+      .cluster { fill: #ffffff; stroke: #075ca8; stroke-width: 2; }
+      .group { fill: #ffffff; stroke: #1774bf; stroke-width: 2; stroke-dasharray: 6 5; }
+      .node { fill: #ffffff; stroke: #2f5f7f; stroke-width: 2; rx: 12; }
+      .soft-node { fill: #f8fbff; stroke: #2f5f7f; stroke-width: 2; rx: 12; }
+      .circle-blue { fill: #1e73be; stroke: #ffffff; stroke-width: 3; }
+      .circle-gold { fill: #e4b42c; stroke: #ffffff; stroke-width: 3; }
+      .circle-red { fill: #d92332; stroke: #ffffff; stroke-width: 3; }
+      .circle-gray { fill: #6b7280; stroke: #ffffff; stroke-width: 3; }
+      .line { stroke: #1f2937; stroke-width: 2.2; fill: none; marker-end: url(#arrow); }
+      .dash { stroke: #1f2937; stroke-width: 1.8; fill: none; stroke-dasharray: 8 7; marker-end: url(#arrow); }
+      .metric { stroke: #4b5563; stroke-width: 1.6; fill: none; stroke-dasharray: 5 6; marker-end: url(#arrow); }
+      .icon { font: 800 21px Arial, sans-serif; fill: #ffffff; text-anchor: middle; dominant-baseline: central; }
+      .dbicon { fill: none; stroke: #ffffff; stroke-width: 3; }
+    </style>
+  </defs>
+
+  <rect x="10" y="10" width="1580" height="910" class="outer"/>
+  <text x="34" y="50" class="page-title">SMARTBANCS NETWORK</text>
+
+  <!-- External actors -->
+  <circle cx="85" cy="230" r="36" class="circle-gold"/>
+  <text x="85" y="230" class="icon">WEB</text>
+  <text x="85" y="284" class="node-title">BROWSER</text>
+
+  <circle cx="85" cy="382" r="36" class="circle-gold"/>
+  <text x="85" y="382" class="icon">APP</text>
+  <text x="85" y="436" class="node-title">MOBILE</text>
+
+  <circle cx="85" cy="534" r="36" class="circle-gray"/>
+  <text x="85" y="534" class="icon">OPS</text>
+  <text x="85" y="588" class="node-title">BACKOFFICE</text>
+
+  <!-- Main environment -->
+  <rect x="170" y="80" width="1360" height="790" class="cluster"/>
+  <text x="205" y="120" class="cluster-title">SmartBancs MVP Environment</text>
+
+  <!-- Entrypoints -->
+  <rect x="230" y="165" width="245" height="520" class="group"/>
+  <text x="352" y="205" class="group-title">ENTRYPOINTS</text>
+
+  <rect x="272" y="255" width="160" height="130" class="node"/>
+  <circle cx="352" cy="297" r="30" class="circle-blue"/>
+  <text x="352" y="297" class="icon">UI</text>
+  <text x="352" y="350" class="node-title">Consola operativa</text>
+  <text x="352" y="371" class="node-text">dashboard del MVP</text>
+
+  <rect x="272" y="455" width="160" height="145" class="node"/>
+  <circle cx="352" cy="496" r="30" class="circle-red"/>
+  <text x="352" y="496" class="icon">API</text>
+  <text x="352" y="550" class="node-title">Transaction API</text>
+  <text x="352" y="572" class="node-text">POST /v1/transfers</text>
+  <text x="352" y="594" class="node-text">Idempotency-Key</text>
+
+  <!-- Backend services -->
+  <rect x="555" y="165" width="295" height="520" class="group"/>
+  <text x="702" y="205" class="group-title">BACKEND SERVICES</text>
+
+  <rect x="600" y="245" width="205" height="145" class="node"/>
+  <circle cx="702" cy="288" r="30" class="circle-blue"/>
+  <text x="702" y="288" class="icon">TS</text>
+  <text x="702" y="342" class="node-title">Transaction Service</text>
+  <text x="702" y="364" class="node-text">validacion, locks</text>
+  <text x="702" y="386" class="node-text">ledger y outbox</text>
+
+  <rect x="600" y="470" width="205" height="125" class="node"/>
+  <circle cx="702" cy="508" r="28" class="circle-blue"/>
+  <text x="702" y="508" class="icon">OW</text>
+  <text x="702" y="558" class="node-title">Outbox Worker</text>
+  <text x="702" y="579" class="node-text">reintentos y backpressure</text>
+
+  <!-- Data -->
+  <rect x="930" y="165" width="230" height="520" class="group"/>
+  <text x="1045" y="205" class="group-title">DATA STORE</text>
+
+  <rect x="970" y="260" width="150" height="285" class="soft-node"/>
+  <circle cx="1045" cy="308" r="30" class="circle-blue"/>
+  <ellipse cx="1045" cy="299" rx="13" ry="6" class="dbicon"/>
+  <path d="M1032 299 V317 C1032 326 1058 326 1058 317 V299" class="dbicon"/>
+  <text x="1045" y="370" class="node-title">PostgreSQL</text>
+  <text x="1045" y="398" class="node-text">accounts</text>
+  <text x="1045" y="421" class="node-text">transfers</text>
+  <text x="1045" y="444" class="node-text">ledger_entries</text>
+  <text x="1045" y="467" class="node-text">outbox_events</text>
+  <text x="1045" y="490" class="node-text">ai_recommendations</text>
+
+  <!-- Core integration -->
+  <rect x="1240" y="165" width="245" height="520" class="group"/>
+  <text x="1362" y="205" class="group-title">CORE INTEGRATION</text>
+
+  <rect x="1278" y="245" width="170" height="135" class="node"/>
+  <circle cx="1362" cy="286" r="28" class="circle-gold"/>
+  <text x="1362" y="286" class="icon">ACL</text>
+  <text x="1362" y="340" class="node-title">Bancs Adapter</text>
+  <text x="1362" y="362" class="node-text">traduccion y rate limit</text>
+
+  <rect x="1278" y="470" width="170" height="105" class="soft-node"/>
+  <circle cx="1362" cy="505" r="26" class="circle-blue"/>
+  <ellipse cx="1362" cy="497" rx="12" ry="5" class="dbicon"/>
+  <path d="M1350 497 V514 C1350 522 1374 522 1374 514 V497" class="dbicon"/>
+  <text x="1362" y="553" class="node-title">Bancs</text>
+  <text x="1362" y="573" class="node-text">core legado</text>
+
+  <!-- Async capabilities -->
+  <rect x="555" y="725" width="930" height="105" class="group"/>
+  <text x="1020" y="755" class="group-title">ASYNC AND OPERATIONAL CAPABILITIES</text>
+
+  <rect x="595" y="780" width="170" height="34" class="soft-node"/>
+  <text x="680" y="802" class="node-title">AI Service</text>
+
+  <rect x="820" y="780" width="170" height="34" class="soft-node"/>
+  <text x="905" y="802" class="node-title">ETL / ELT</text>
+
+  <rect x="1090" y="780" width="210" height="34" class="soft-node"/>
+  <text x="1195" y="802" class="node-title">Prometheus / metrics</text>
+
+  <!-- External arrows -->
+  <path d="M121 230 H250 V320 H272" class="line"/>
+  <path d="M121 382 H220 V528 H272" class="line"/>
+  <path d="M121 534 H272" class="line"/>
+
+  <!-- Entrypoint to backend -->
+  <path d="M432 528 H555 V318 H600" class="line"/>
+  <path d="M352 385 V455" class="dash"/>
+
+  <!-- Backend to data -->
+  <path d="M805 318 H970" class="line"/>
+  <path d="M970 500 H840 V532 H805" class="dash"/>
+  <text x="890" y="493" class="small">outbox_events</text>
+
+  <!-- Worker to core -->
+  <path d="M805 532 H860 V650 H1215 V312 H1278" class="line"/>
+  <path d="M1362 380 V470" class="line"/>
+
+  <!-- Async paths -->
+  <path d="M702 595 V725 H680 V780" class="dash"/>
+  <path d="M1045 545 V725 H905 V780" class="dash"/>
+  <!-- Legend -->
+  <rect x="230" y="735" width="245" height="95" fill="#ffffff" stroke="#d7d7d7" rx="10"/>
+  <path d="M260 765 H315" class="line"/>
+  <text x="335" y="770" class="legend">Flujo transaccional</text>
+  <path d="M260 800 H315" class="dash"/>
+  <text x="335" y="805" class="legend">Asincrono u operativo</text>
+</svg>

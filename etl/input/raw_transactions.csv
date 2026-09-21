@@ -1,0 +1,5 @@
+transaction_id,customer_id,source_account,destination_account,amount,currency,transaction_date,category
+t-001,CUS-001,ACC-1001,ACC-2001,"125.50",usd,2026-09-01,transfer
+t-002,CUS-001,ACC-1002,ACC-2001,"",USD,01/09/2026,
+t-003,CUS-002,ACC-2001,ACC-1001,"89,75",Usd,Sept 2 2026,payment
+t-004,,ACC-1001,ACC-2001,"45.00",USD,2026/09/03,transfer

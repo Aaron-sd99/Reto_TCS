@@ -1,0 +1,85 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: smartbancs
+      POSTGRES_USER: smartbancs
+      POSTGRES_PASSWORD: smartbancs
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/migrations:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U smartbancs -d smartbancs"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  bancs-adapter:
+    build: ./services/bancs-adapter
+    environment:
+      DATABASE_URL: postgresql://smartbancs:smartbancs@postgres:5432/smartbancs
+      BANCS_MAX_INFLIGHT: "25"
+      BANCS_ARTIFICIAL_DELAY_MS: "80"
+    ports:
+      - "8081:8081"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  ai-service:
+    build: ./services/ai-service
+    environment:
+      MODEL_VERSION: "mock-risk-advisor-2026.09"
+      ARTIFICIAL_DELAY_MS: "50"
+      DATABASE_URL: postgresql://smartbancs:smartbancs@postgres:5432/smartbancs
+    ports:
+      - "8082:8082"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  transaction-service:
+    build: ./services/transaction-service
+    environment:
+      DATABASE_URL: postgresql://smartbancs:smartbancs@postgres:5432/smartbancs
+      BANCS_ADAPTER_URL: http://bancs-adapter:8081
+      AI_SERVICE_URL: http://ai-service:8082
+      CORE_TIMEOUT_SECONDS: "1.4"
+      OUTBOX_POLL_SECONDS: "0.2"
+      OUTBOX_BATCH_SIZE: "200"
+      OUTBOX_MAX_CONCURRENCY: "25"
+      DB_POOL_MAX_SIZE: "32"
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      bancs-adapter:
+        condition: service_started
+      ai-service:
+        condition: service_started
+
+  prometheus:
+    image: prom/prometheus:v2.55.1
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+    volumes:
+      - ./observability/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9090:9090"
+    depends_on:
+      - transaction-service
+      - bancs-adapter
+      - ai-service
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8083:80"
+    depends_on:
+      - transaction-service
+
+volumes:
+  postgres_data:

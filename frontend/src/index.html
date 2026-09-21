@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SmartBancs Console</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Navegación principal">
+        <div class="brand">
+          <span class="brand-mark">SB</span>
+          <div>
+            <strong>SmartBancs</strong>
+            <small>Integración core</small>
+          </div>
+        </div>
+
+        <nav class="nav-list" aria-label="Secciones">
+          <a class="nav-item active" href="#operations">Operaciones</a>
+          <a class="nav-item" href="#transfer">Transferencias</a>
+          <a class="nav-item" href="#observability">Observabilidad</a>
+          <a class="nav-item" href="#accounts">Cuentas</a>
+          <a class="nav-item" href="#integration">Integración</a>
+        </nav>
+
+        <div class="sidebar-note">
+          <span>Ambiente local</span>
+          <strong>Docker Compose</strong>
+        </div>
+      </aside>
+
+      <main class="main-area">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Consola operativa</p>
+            <h1>Consola transaccional Bancs</h1>
+            <p class="header-copy">
+              Monitoreo operativo del flujo de transferencias, outbox, ledger, proyección de saldos e integración con el core bancario.
+            </p>
+          </div>
+          <div class="topbar-actions">
+            <span id="apiStatus" class="status-pill pending">Verificando API</span>
+            <a class="secondary-link" href="http://localhost:8080/docs" target="_blank" rel="noreferrer">API</a>
+            <a class="secondary-link" href="http://localhost:9090" target="_blank" rel="noreferrer">Prometheus</a>
+            <button id="refreshButton" class="primary-button" type="button">Actualizar</button>
+          </div>
+        </header>
+
+        <section id="operations" class="metric-grid" aria-label="Resumen operativo">
+          <article class="metric-card">
+            <span>Transferencias</span>
+            <strong id="totalTransfers">0</strong>
+            <small id="transferBreakdown">Sin datos</small>
+          </article>
+          <article class="metric-card">
+            <span>Outbox publicado</span>
+            <strong id="outboxPublished">0</strong>
+            <small id="outboxBreakdown">Eventos publicados</small>
+          </article>
+          <article class="metric-card">
+            <span>Recomendaciones IA</span>
+            <strong id="aiRecommendations">0</strong>
+            <small>Fuera del camino crítico</small>
+          </article>
+          <article class="metric-card">
+            <span>Ledger técnico</span>
+            <strong id="ledgerEntries">0</strong>
+            <small>Entradas auditables</small>
+          </article>
+        </section>
+
+        <section id="observability" class="panel observability-panel" aria-labelledby="observabilityTitle">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Observabilidad</p>
+              <h2 id="observabilityTitle">Métricas operativas</h2>
+            </div>
+            <span id="observabilityStatus" class="status-pill pending">Sin consulta</span>
+          </div>
+
+          <div id="metricFilters" class="metric-filters" aria-label="Filtros de métricas">
+            <button class="filter-button active" type="button" data-view="services">Servicios</button>
+            <button class="filter-button" type="button" data-view="transfers">Transferencias</button>
+            <button class="filter-button" type="button" data-view="latency">Latencia</button>
+            <button class="filter-button" type="button" data-view="errors">Errores</button>
+            <button class="filter-button" type="button" data-view="outbox">Outbox</button>
+            <button class="filter-button" type="button" data-view="core">Bancs</button>
+            <button class="filter-button" type="button" data-view="ai">IA</button>
+          </div>
+
+          <div id="metricChart" class="metric-chart" aria-live="polite"></div>
+          <div id="metricDetail" class="metric-detail"></div>
+        </section>
+
+        <section class="workspace-grid">
+          <section id="transfer" class="panel transfer-panel" aria-labelledby="transferTitle">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Nueva operación</p>
+                <h2 id="transferTitle">Registrar transferencia</h2>
+              </div>
+            </div>
+
+            <form id="transferForm" class="transfer-form">
+              <label>
+                Cuenta origen
+                <select id="sourceAccount" name="source_account"></select>
+              </label>
+              <label>
+                Cuenta destino
+                <select id="destinationAccount" name="destination_account"></select>
+              </label>
+              <label>
+                Monto
+                <input id="amount" name="amount" inputmode="decimal" value="25.00" />
+              </label>
+              <label>
+                Moneda
+                <input id="currency" name="currency" value="USD" maxlength="3" />
+              </label>
+              <label>
+                Cliente
+                <input id="customerId" name="customer_id" value="CUS-001" />
+              </label>
+              <button id="submitTransferButton" class="primary-button full" type="submit">Enviar transferencia</button>
+            </form>
+
+            <div id="transferResult" class="result-box" aria-live="polite">
+              La operación se registra primero en la capa transaccional y luego se liquida contra el adapter del core.
+            </div>
+          </section>
+
+          <section id="integration" class="panel integration-panel" aria-labelledby="integrationTitle">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Integración</p>
+                <h2 id="integrationTitle">Flujo operativo</h2>
+              </div>
+            </div>
+
+            <ol class="integration-list">
+              <li>
+                <span>01</span>
+                <div>
+                  <strong>Canal digital</strong>
+                  <small>Envía la solicitud con correlación e idempotencia.</small>
+                </div>
+              </li>
+              <li>
+                <span>02</span>
+                <div>
+                  <strong>Transaction Service</strong>
+                  <small>Valida, reserva saldo y publica eventos en outbox.</small>
+                </div>
+              </li>
+              <li>
+                <span>03</span>
+                <div>
+                  <strong>Bancs Adapter</strong>
+                  <small>Aísla contratos del core, timeouts y conciliación.</small>
+                </div>
+              </li>
+              <li>
+                <span>04</span>
+                <div>
+                  <strong>IA post-settlement</strong>
+                  <small>Consume eventos sin bloquear el flujo financiero.</small>
+                </div>
+              </li>
+            </ol>
+          </section>
+        </section>
+
+        <section class="data-grid">
+          <section id="accounts" class="panel" aria-labelledby="accountsTitle">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Proyección local</p>
+                <h2 id="accountsTitle">Cuentas</h2>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Cuenta</th>
+                    <th>Cliente</th>
+                    <th>Saldo</th>
+                    <th>Estado</th>
+                  </tr>
+                </thead>
+                <tbody id="accountsTable"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="panel" aria-labelledby="activityTitle">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Trazabilidad</p>
+                <h2 id="activityTitle">Actividad reciente</h2>
+              </div>
+            </div>
+            <div id="transfersList" class="activity-list"></div>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <script src="/app.js?v=20260920-timeseries-observability"></script>
+  </body>
+</html>
